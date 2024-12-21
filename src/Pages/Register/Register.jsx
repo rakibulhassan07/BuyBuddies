@@ -1,10 +1,37 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { AuthContext } from '../../provider/AuthProvider';
+import { CgArrowLongRight } from 'react-icons/cg';
 const Register = () => {
     
+  const {createUser}=useContext(AuthContext)
+
+  const handleRegister =e=>{
+    e.preventDefault();
+    const form=new FormData(e.currentTarget);
+    const name=form.get('name')
+    const photo=form.get('photo')
+    const email=form.get('email')
+    const password=form.get('password')
+    console.log()
+
+    //creat user
+    createUser(email,password)
+    .then(result => {
+      // Signed up 
+      console.log(result.user)
+      // ...
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+  
+   }
+
+
     const [visible,setVisible]=useState(false)
     const showPass = () => {
         setVisible((prev) => !prev)
@@ -35,7 +62,7 @@ const Register = () => {
                   transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
                 >
           <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl bg-[linear-gradient(90deg,_#87CEEB_0%,_#4682B4_100%)]">
-            <form className="card-body ">
+            <form onSubmit={handleRegister} className="card-body ">
               <p className="flex justify-center font-extrabold text-xl">Please Register</p>
               <div className="form-control">
               <label className="label">

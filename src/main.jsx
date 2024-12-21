@@ -9,6 +9,9 @@ import Home from "./Pages/Home/Home.jsx";
 import Logi from "./Pages/Login/Login..jsx";
 import Login from "./Pages/Login/Login..jsx";
 import Register from "./Pages/Register/Register.jsx";
+import MyProfile from "./Pages/MyProfile/MyProfile..jsx";
+import AuthProvider from "./provider/AuthProvider.jsx";
+import PrivateRoute from "./privateRoute/PrivateRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,12 +30,18 @@ const router = createBrowserRouter([
         path: "/register",
         element:<Register></Register>,
       },
+      {
+        path: "/myprofile",
+        element: <PrivateRoute> <MyProfile></MyProfile> </PrivateRoute>
+      }
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+    <RouterProvider router={router} /> 
+    </AuthProvider>
   </StrictMode>
 );
