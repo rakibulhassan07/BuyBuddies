@@ -1,36 +1,30 @@
 import React, { useContext, useState } from 'react';
-
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthContext } from '../../provider/AuthProvider';
-import { CgArrowLongRight } from 'react-icons/cg';
 const Register = () => {
     
-  const {createUser}=useContext(AuthContext)
+  const {createUser,updateUserProfile,setUser}=useContext(AuthContext)
 
-  const handleRegister =e=>{
+  const handleRegister = (e) => {
     e.preventDefault();
-    const form=new FormData(e.currentTarget);
-    const name=form.get('name')
-    const photo=form.get('photo')
-    const email=form.get('email')
-    const password=form.get('password')
-    console.log()
-
-    //creat user
-    createUser(email,password)
-    .then(result => {
-      // Signed up 
-      console.log(result.user)
-      // ...
-    })
-    .catch((error) => {
-      console.log(error)
-    });
+    const form = new FormData(e.currentTarget);
+    const name = form.get("name");
+    const photo = form.get("photoUrl");
+    const email = form.get("email");
+    const password = form.get("password");
   
-   }
-
+    createUser(email, password, name, photo)
+        .then(result => {
+            console.log(result.user);
+            // The user profile should now be updated with both name and photo
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+  
 
     const [visible,setVisible]=useState(false)
     const showPass = () => {
@@ -81,7 +75,7 @@ const Register = () => {
                   <span className="label-text">Photo</span>
                 </label>
                 <input
-                  name="photoUrl"
+                  name="photo"
                   type="text"
                   placeholder="Photo URL"
                   className="input input-bordered"

@@ -6,11 +6,9 @@ const Navbar = () => {
 
    const {user,logOut}=useContext(AuthContext);
 
-   const handleSingOut=()=>{
-           logOut()
-           .then()
-           .catch()
-   }
+   const handleSingOut = () => {
+    logOut()
+  };
 
   return (
     <div className="sticky top-0 z-50 bg-orange-200 backdrop-blur-lg shadow-md p-4 flex items-center justify-between">
@@ -41,12 +39,21 @@ const Navbar = () => {
 
       {/* Login Button on the Right */}
       <div className="flex items-center gap-4 flex-none">
-      <div>
+      {user && user?.email ? (
+          <div>
+            <img
+              src={user?.photoURL}
+              alt="User Profile"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+            <p>{user.displayName}</p>
+          </div>
+        ) : (
           <iframe
             className="w-12 h-12 md:w-16 md:h-16"
             src="https://lottie.host/embed/21c0f04d-247e-460b-921b-f165217a9ef3/Mov0qGZhSD.json"
           ></iframe>
-      </div>
+        )}
       {
         user?
         

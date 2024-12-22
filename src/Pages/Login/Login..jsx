@@ -1,31 +1,51 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FcGoogle } from "react-icons/fc";
 import { AuthContext } from "../../provider/AuthProvider";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const { signIn } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const [visible, setVisible] = useState(false);
+
+  const showPass = () => setVisible((prev) => !prev);
+
+  const validatePassword = (password) => {
+    const hasMinLength = password.length >= 6;
+
+    if (!hasMinLength) {
+      const errorMsg = "Password must contain at least 6 characters";
+      toast.error(errorMsg);
+      return false;
+    }
+    return true;
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const email = form.get("email");
     const password = form.get("password");
 
-    signIn(email, password)
-      .then((result) => {
-        console.log(result.user);
-        // Redirect to the intended page or the homepage
-       // const redirectPath = location.state?.from?.pathname || "/";
-       // navigate(redirectPath);
-       navigate(location?.state ? location.state:'/');
-      })
-      .catch((error) => {
-        console.error("Login Error:", error);
-      });
+    if (!validatePassword(password)) {
+      return;
+    }
+    try {
+      await signIn(email, password);
+      toast.success("Login successful!"); // Added success toast
+      // Wait for toast to be visible before navigation
+      setTimeout(() => {
+        const redirectPath = location.state?.from?.pathname || "/";
+        navigate(redirectPath, { replace: true });
+      }, 1000); // Short delay to ensure toast is visible
+    } catch (error) {
+      toast.error("Login failed! please enter valid password and email");
+    }
   };
 
   return (
@@ -71,18 +91,22 @@ const Login = () => {
                 <label className="label">
                   <span className="label-text">Password</span>
                 </label>
-                <input
-                  type="password"
-                  placeholder="password"
-                  name="password"
-                  className="input input-bordered"
-                  required
-                />
-                <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
-                    Forgot password?
-                  </a>
-                </label>
+                <div className="relative">
+                  <input
+                    name="password"
+                    type={visible ? "text" : "password"}
+                    placeholder="Password"
+                    className="input input-bordered w-full"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={showPass}
+                    className="absolute inset-y-0 right-1 flex items-center text-gray-500 focus:outline-none"
+                  >
+                    {visible ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
               </div>
               <p>
                 If you are new here please{" "}
@@ -90,11 +114,6 @@ const Login = () => {
                   Register
                 </Link>
               </p>
-              <div className="flex justify-center">
-                <button>
-                  <FcGoogle className="w-10 h-10" />
-                </button>
-              </div>
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Login</button>
               </div>
@@ -102,6 +121,7 @@ const Login = () => {
           </div>
         </motion.div>
       </div>
+      <ToastContainer position="top-center" autoClose={2000} />
     </div>
   );
 };
