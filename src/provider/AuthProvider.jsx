@@ -12,30 +12,19 @@ const AuthProvider = ({children}) => {
     const [user,setUser]=useState(null);
     const [loading, setLoading] = useState(true); 
     
-    //update user profile
-    const updateUserProfile = (name, photoUrl) => {
-        return updateProfile(auth.currentUser, {
-          displayName: name,
-          photoURL: photoUrl,
-        });
-      }; 
 //create user
-const createUser = (email, password, name, photoUrl) => {
+const createUser = (email, password) => {
     setLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password)
-        .then((result) => {
-            // Return the promise chain from updateUserProfile
-            return updateUserProfile(name, photoUrl)
-                .then(() => {
-                    // Return the user result after profile is updated
-                    return result;
-                });
-        })
-        .finally(() => {
-            setLoading(false);
-        });
-};
-  
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+  //update user profile
+  const updateUserProfile = (name, photo) => {
+    setLoading(true);
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
+    });
+  };
     
     const signIn=(email,password)=>{
         setLoading(true);
@@ -48,7 +37,7 @@ const createUser = (email, password, name, photoUrl) => {
     useEffect(()=>{
         const unSubscribe=onAuthStateChanged(auth,currentUser=>{
 
-            console.log('user in auth ',currentUser)
+            //console.log('user in auth ',currentUser)
             setUser(currentUser);
             setLoading(false);
         });
@@ -62,6 +51,7 @@ const createUser = (email, password, name, photoUrl) => {
          createUser,
          logOut,
          signIn,
+         updateUserProfile
     }
     return (
         <AuthContext.Provider value={authInfo}>
