@@ -89,7 +89,7 @@ const Login = () => {
               </div>
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Password</span>
+                  <span className="label-text">password</span>
                 </label>
                 <div className="relative">
                   <input
