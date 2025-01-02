@@ -89,12 +89,12 @@ const Login = () => {
               </div>
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">password</span>
+                  <span className="label-text">Password</span>
                 </label>
                 <div className="relative">
                   <input
                     name="password"
-                    type={visible ? "text" : "password"}
+                    type={visible ? "text" : "password"}// added djsahfisd
                     placeholder="Password"
                     className="input input-bordered w-full"
                     required

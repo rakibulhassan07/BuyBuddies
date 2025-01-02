@@ -5,51 +5,96 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthContext } from '../../provider/AuthProvider';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Add this import
+import { useForm } from 'react-hook-form';
 
 const Register = () => {
     const {createUser, updateUserProfile, setUser} = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
-    
-    const handleRegister = async e => {
-        e.preventDefault();
-        const form = e.target;
-        const email = form.email.value;
-        const name = form.name.value;
-        const photo = form.photo.value;
-        const pass = form.password.value;
-        
-        try {
-            const result = await createUser(email, pass);
-            await updateUserProfile(name, photo);
-            setUser({ ...result.user, photoURL: photo, displayName: name });
+   
+    // createUser(email, pass).then((result) => {
+    //     updateUserProfile(name, photo).then(() => {
+    //           const  saveUser = {
+    //                 email: email,
+    //                 name: name,
+    //                 photo: photo,
+    //                 password: pass,
+    //                 role: 'user'
+    //                   }
+    //                   console.log(saveUser);
+    //                 //    now send the data to database
+    //                 fetch('http://localhost/BuyBuddies/index.php/api/users',
+    //                     {method: 'POST',
+    //                         headers: {
+    //                             ' Content-Type': 'application/json',
+    //                         },
+    //                         body: JSON.stringify(saveUser)
+    //                     })
+    //                     .then(res => res.json())
+    //                      .then(data => console.log('data insetred', data))   
+    //                 })
+    // })
+        const {
+          register,
+          handleSubmit,
+          reset,
+          formState: { error },
+        } = useForm();
+
+        const onsubmit = (data) => {
+            try {
+                console.log(data);
+                createUser(data.email, data.password)
+                    .then((result) => {
+                    updateUserProfile(data.name, data.photo)
+                        .then(() => {
+                        const saveUser = {
+                            email: data.email,
+                            name: data.name,
+                            photo: data.photo,
+                            password: data.password,
+                            role: "user",
+                        };
+                        fetch("http://localhost/BuyBuddies/index.php/api/users", {
+                            method: "POST",
+                            headers: {
+                            "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(saveUser),
+                        })
+                            .then((res) => res.json())
+                            .then((data) => {
+                                if (data.insertedId) {
+                                    reset();
+                                    Swal.fire("User Created Successfully");
+                                    navigate("/dashboard");
+                                  }
+                            });
+                        })
+                        .catch((err) => {
+                        console.log(err);
+                        });
+                    })
+                    .catch((err) => {
+                    console.log(err);
+                    });
+                    toast.success('Registration Successful!', {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                    });
+                    setTimeout(() => {
+                        const redirectPath = location.state?.from?.pathname || "/";
+                        navigate(redirectPath, { replace: true });
+                    }, 3000);  // Changed to 3000ms to match toast duration
+            }catch (error) {
+                toast.error("Login failed! please enter valid password and email");
+            }
             
-            toast.success('Registration Successful!', {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-            });
-
-            setTimeout(() => {
-                const redirectPath = location.state?.from?.pathname || "/";
-                navigate(redirectPath, { replace: true });
-            }, 3000);  // Changed to 3000ms to match toast duration
-        } catch (err) {
-           // console.log(err);
-            toast.error(err?.message || 'Registration failed. Please try again.', {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-            });
-        }
-    };
-
+        };
     const [visible, setVisible] = useState(false);
     const showPass = () => {
         setVisible((prev) => !prev);
@@ -81,7 +126,7 @@ const Register = () => {
                     transition={{ duration: 0.8, ease: "easeInOut", delay: 0.3 }}
                 >
                     <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl bg-[linear-gradient(90deg,_#87CEEB_0%,_#4682B4_100%)]">
-                        <form onSubmit={handleRegister} className="card-body">
+                        <form onSubmit={handleSubmit(onsubmit)} className="card-body">
                             {/* Rest of your form code remains the same */}
                             <p className="flex justify-center font-extrabold text-xl">Please Register</p>
                             <div className="form-control">
@@ -91,6 +136,7 @@ const Register = () => {
                                 <input
                                     name="name"
                                     type="text"
+                                    {...register("name", { required: true })}
                                     placeholder="Name"
                                     className="input input-bordered"
                                     required
@@ -103,6 +149,7 @@ const Register = () => {
                                 <input
                                     name="photo"
                                     type="text"
+                                    {...register("photo", { required: true })}
                                     placeholder="Photo URL"
                                     className="input input-bordered"
                                     required
@@ -115,6 +162,7 @@ const Register = () => {
                                 <input
                                     name="email"
                                     type="email"
+                                    {...register("email", { required: true })}
                                     placeholder="Email"
                                     className="input input-bordered"
                                     required
@@ -128,6 +176,7 @@ const Register = () => {
                                     <input 
                                         name="password"
                                         type={visible ? "text" : "password"}
+                                        {...register("password", { required: true })}
                                         placeholder="Password"
                                         className="input input-bordered w-full"
                                         required
@@ -154,5 +203,4 @@ const Register = () => {
         </div>
     );
 };
-
 export default Register;

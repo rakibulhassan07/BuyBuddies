@@ -6,12 +6,13 @@ import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./Layout/Root.jsx";
 import Home from "./Pages/Home/Home.jsx";
-import Logi from "./Pages/Login/Login..jsx";
+
 import Login from "./Pages/Login/Login..jsx";
 import Register from "./Pages/Register/Register.jsx";
-import MyProfile from "./Pages/MyProfile/MyProfile..jsx";
+import MyProfile from "./Pages/MyProfile/Myprofile.jsx";
 import AuthProvider from "./provider/AuthProvider.jsx";
 import PrivateRoute from "./privateRoute/PrivateRoute.jsx";
+import Deshboard from "./Pages/MyProfile/Myprofile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/myprofile",
-        element: <PrivateRoute> <MyProfile></MyProfile> </PrivateRoute>
+        element: <PrivateRoute> <Deshboard></Deshboard> </PrivateRoute>
       }
     ],
   },

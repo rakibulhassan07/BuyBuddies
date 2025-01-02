@@ -7,7 +7,7 @@ const Root = () => {
   return (
     <div>
         <Navbar></Navbar>
-        <div className="bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)]">
+        <div className="bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)] h-screen">
           <Outlet></Outlet>
         </div>
         
