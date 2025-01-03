@@ -30,6 +30,9 @@ const Navbar = () => {
             <NavLink to="/myprofile">My profile</NavLink>
           </li>
           <li>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+          </li>
+          <li>
             <NavLink to="/cart" className="text-2xl">
               <FaCartShopping />
             </NavLink>

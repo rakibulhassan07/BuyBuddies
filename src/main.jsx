@@ -12,7 +12,13 @@ import Register from "./Pages/Register/Register.jsx";
 import MyProfile from "./Pages/MyProfile/Myprofile.jsx";
 import AuthProvider from "./provider/AuthProvider.jsx";
 import PrivateRoute from "./privateRoute/PrivateRoute.jsx";
-import Deshboard from "./Pages/MyProfile/Myprofile.jsx";
+import ProductDetails from "./Pages/ProductDetails/ProductDetails.jsx";
+import DashboardLayout from "./Layout/DashboardLayout.jsx";
+import AdminStatistics from "./components/Deshboard/statistics/AdminStatistics.jsx";
+import Statistics from "./Pages/Dashboard/Common/Statistics.jsx";
+import AddProduct from "./Pages/Dashboard/Seller/AddProduct.jsx";
+import MyInventory from "./Pages/Dashboard/Seller/MyInventory.jsx";
+import ManageUsers from "./Pages/Dashboard/Admin/ManageUsers.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,10 +39,39 @@ const router = createBrowserRouter([
       },
       {
         path: "/myprofile",
-        element: <PrivateRoute> <Deshboard></Deshboard> </PrivateRoute>
-      }
+        element: <PrivateRoute> <MyProfile></MyProfile> </PrivateRoute>
+      },
+      {
+        path: "/productDetails",
+        element: <PrivateRoute> <ProductDetails></ProductDetails> </PrivateRoute>
+      },
+        {
+        path: "/dashboard",
+        element:<PrivateRoute> <DashboardLayout></DashboardLayout> </PrivateRoute>,
+       children: [
+         {
+             index:true,
+             element: <PrivateRoute> <Statistics></Statistics> </PrivateRoute>
+         },
+         {
+          path: "add-product",
+          element: <PrivateRoute> <AddProduct></AddProduct> </PrivateRoute>
+         },
+         {
+          path: "my-invetory",
+          element: <PrivateRoute> <MyInventory></MyInventory> </PrivateRoute>
+         },
+         {
+          path: "manage-users",
+          element: <PrivateRoute> <ManageUsers></ManageUsers> </PrivateRoute>
+         },
+
+        ],
+       },
+      
     ],
   },
+
 ]);
 
 createRoot(document.getElementById("root")).render(

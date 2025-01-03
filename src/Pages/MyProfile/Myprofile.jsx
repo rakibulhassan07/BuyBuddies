@@ -6,7 +6,7 @@ const MyProfile = () => {
     console.log(user);
 
     return (
-        <div className='flex flex-col items-center justify-center space-y-4 p-16 md:p-32'> 
+        <div className='flex flex-col items-center  space-y-4 md:p-32 h-screen'> 
             <img className="w-32 h-32 rounded-full object-cover"
               src={user?.photoURL}
               alt="User Profile"   

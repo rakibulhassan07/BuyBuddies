@@ -8,32 +8,12 @@ import 'react-toastify/dist/ReactToastify.css';  // Add this import
 import { useForm } from 'react-hook-form';
 
 const Register = () => {
-    const {createUser, updateUserProfile, setUser} = useContext(AuthContext);
+    const {createUser, updateUserProfile} = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
+    const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState('');
    
-    // createUser(email, pass).then((result) => {
-    //     updateUserProfile(name, photo).then(() => {
-    //           const  saveUser = {
-    //                 email: email,
-    //                 name: name,
-    //                 photo: photo,
-    //                 password: pass,
-    //                 role: 'user'
-    //                   }
-    //                   console.log(saveUser);
-    //                 //    now send the data to database
-    //                 fetch('http://localhost/BuyBuddies/index.php/api/users',
-    //                     {method: 'POST',
-    //                         headers: {
-    //                             ' Content-Type': 'application/json',
-    //                         },
-    //                         body: JSON.stringify(saveUser)
-    //                     })
-    //                     .then(res => res.json())
-    //                      .then(data => console.log('data insetred', data))   
-    //                 })
-    // })
         const {
           register,
           handleSubmit,
@@ -41,17 +21,43 @@ const Register = () => {
           formState: { error },
         } = useForm();
 
-        const onsubmit = (data) => {
+        const handleImageUpload = async (event) => {
+            const file = event.target.files[0];
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            // Replace YOUR_IMGBB_API_KEY with your actual ImgBB API key
+            const url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`;
+            
+            try {
+                setLoading(true);
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.success) {
+                    setImageUrl(data.data.url);
+                    toast.success('Image uploaded successfully!');
+                }
+            } catch (error) {
+                toast.error('Image upload failed!');
+                console.error('Error uploading image:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        const onsubmit = async(data) => {
             try {
                 console.log(data);
-                createUser(data.email, data.password)
+                await createUser(data.email, data.password)
                     .then((result) => {
-                    updateUserProfile(data.name, data.photo)
+                      updateUserProfile(data.name, imageUrl)
                         .then(() => {
                         const saveUser = {
                             email: data.email,
                             name: data.name,
-                            photo: data.photo,
+                            photo: imageUrl,
                             password: data.password,
                             role: "user",
                         };
@@ -101,8 +107,8 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex justify-center items-center bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)]">
-            <ToastContainer />  {/* Add this component */}
+  <div className="min-h-screen flex justify-center items-center bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)]">
+            <ToastContainer />
             <div className="hero-content flex-col lg:flex-row-reverse">
                 <div className="text-center lg:text-left">
                     <motion.div
@@ -118,7 +124,7 @@ const Register = () => {
                         ></iframe>
                     </motion.div>
                 </div>
-        
+                
                 <motion.div
                     className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl"
                     initial={{ opacity: 0, y: 50 }}
@@ -127,59 +133,60 @@ const Register = () => {
                 >
                     <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl bg-[linear-gradient(90deg,_#87CEEB_0%,_#4682B4_100%)]">
                         <form onSubmit={handleSubmit(onsubmit)} className="card-body">
-                            {/* Rest of your form code remains the same */}
                             <p className="flex justify-center font-extrabold text-xl">Please Register</p>
+                            
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Name</span>
                                 </label>
                                 <input
-                                    name="name"
                                     type="text"
                                     {...register("name", { required: true })}
                                     placeholder="Name"
                                     className="input input-bordered"
-                                    required
                                 />
                             </div>
+
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text">Photo</span>
+                                    <span className="label-text">Profile Image</span>
                                 </label>
                                 <input
-                                    name="photo"
-                                    type="text"
-                                    {...register("photo", { required: true })}
-                                    placeholder="Photo URL"
-                                    className="input input-bordered"
-                                    required
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                    className="input input-bordered pt-2"
                                 />
-                            </div> 
+                                {loading && <span className="text-sm text-gray-500">Uploading image...</span>}
+                                {imageUrl && (
+                                    <div className="mt-2">
+                                        <img src={imageUrl} alt="Profile" className="w-20 h-20 object-cover rounded" />
+                                    </div>
+                                )}
+                            </div>
+
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
                                 <input
-                                    name="email"
                                     type="email"
                                     {...register("email", { required: true })}
                                     placeholder="Email"
                                     className="input input-bordered"
-                                    required
                                 />
-                            </div>       
+                            </div>
+
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <div className='relative'>
+                                <div className="relative">
                                     <input 
-                                        name="password"
                                         type={visible ? "text" : "password"}
                                         {...register("password", { required: true })}
                                         placeholder="Password"
                                         className="input input-bordered w-full"
-                                        required
                                     />
                                     <button
                                         type="button"
@@ -193,8 +200,14 @@ const Register = () => {
                                     Already have an account? <Link className="font-semibold link link-hover" to="/login">Login</Link>
                                 </p>
                             </div>
+
                             <div className="form-control mt-6">
-                                <button className="btn btn-primary">Register</button>
+                                <button 
+                                    className="btn btn-primary" 
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Processing...' : 'Register'}
+                                </button>
                             </div>
                         </form>
                     </div>
