@@ -6,6 +6,8 @@ import { AuthContext } from '../../provider/AuthProvider';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Add this import
 import { useForm } from 'react-hook-form';
+import { TbFidgetSpinner } from "react-icons/tb";
+
 
 const Register = () => {
     const {createUser, updateUserProfile} = useContext(AuthContext);
@@ -30,7 +32,7 @@ const Register = () => {
             const url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`;
             
             try {
-                setLoading(true);
+                setLoading(false);
                 const response = await fetch(url, {
                     method: 'POST',
                     body: formData
@@ -49,7 +51,7 @@ const Register = () => {
         };
         const onsubmit = async(data) => {
             try {
-                console.log(data);
+                setLoading(true);
                 await createUser(data.email, data.password)
                     .then((result) => {
                       updateUserProfile(data.name, imageUrl)
@@ -59,7 +61,7 @@ const Register = () => {
                             name: data.name,
                             photo: imageUrl,
                             password: data.password,
-                            role: "user",
+                            role: "customer",
                         };
                         fetch("http://localhost/BuyBuddies/index.php/api/users", {
                             method: "POST",
@@ -80,18 +82,27 @@ const Register = () => {
                         .catch((err) => {
                         console.log(err);
                         });
+                        toast.success('Registration Successful!', {
+                            position: "top-center",
+                            autoClose: 2000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                        });
                     })
                     .catch((err) => {
-                    console.log(err);
-                    });
-                    toast.success('Registration Successful!', {
+                    console.log(err); 
+                    toast.error('mail is already exist', {
                         position: "top-center",
-                        autoClose: 3000,
+                        autoClose: 2000,
                         hideProgressBar: false,
                         closeOnClick: true,
                         pauseOnHover: true,
                         draggable: true,
                     });
+                    });
+                 
                     setTimeout(() => {
                         const redirectPath = location.state?.from?.pathname || "/";
                         navigate(redirectPath, { replace: true });
@@ -157,7 +168,7 @@ const Register = () => {
                                     onChange={handleImageUpload}
                                     className="input input-bordered pt-2"
                                 />
-                                {loading && <span className="text-sm text-gray-500">Uploading image...</span>}
+                                
                                 {imageUrl && (
                                     <div className="mt-2">
                                         <img src={imageUrl} alt="Profile" className="w-20 h-20 object-cover rounded" />
@@ -202,11 +213,11 @@ const Register = () => {
                             </div>
 
                             <div className="form-control mt-6">
-                                <button 
+                                <button type='submit'
                                     className="btn btn-primary" 
-                                    disabled={loading}
+                                    
                                 >
-                                    {loading ? 'Processing...' : 'Register'}
+                                    {loading ? (<TbFidgetSpinner className="animate-spin h-5 w-5" />) :('Register')}
                                 </button>
                             </div>
                         </form>

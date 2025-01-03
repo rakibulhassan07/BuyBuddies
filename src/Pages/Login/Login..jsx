@@ -2,15 +2,15 @@ import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../provider/AuthProvider";
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { TbFidgetSpinner } from "react-icons/tb";
 const Login = () => {
   const { signIn } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
 
   const showPass = () => setVisible((prev) => !prev);
@@ -36,6 +36,7 @@ const Login = () => {
       return;
     }
     try {
+      setLoading(true);
       await signIn(email, password);
       toast.success("Login successful!"); // Added success toast
       // Wait for toast to be visible before navigation
@@ -74,7 +75,9 @@ const Login = () => {
         >
           <div className="card w-full max-w-sm shrink-0 shadow-2xl bg-[linear-gradient(90deg,_#87CEEB_0%,_#4682B4_100%)]">
             <form onSubmit={handleLogin} className="card-body">
-              <p className="flex justify-center font-extrabold text-xl">Please Login Your Account</p>
+              <p className="flex justify-center font-extrabold text-xl">
+                Please Login Your Account
+              </p>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
@@ -94,7 +97,7 @@ const Login = () => {
                 <div className="relative">
                   <input
                     name="password"
-                    type={visible ? "text" : "password"}// added djsahfisd
+                    type={visible ? "text" : "password"} // added djsahfisd
                     placeholder="Password"
                     className="input input-bordered w-full"
                     required
@@ -115,7 +118,13 @@ const Login = () => {
                 </Link>
               </p>
               <div className="form-control mt-6">
-                <button className="btn btn-primary">Login</button>
+                <button type="submit" className="btn btn-primary">
+                  {loading ? (
+                    <TbFidgetSpinner className="animate-spin h-5 w-5" />
+                  ) : (
+                    "Login"
+                  )}
+                </button>
               </div>
             </form>
           </div>
