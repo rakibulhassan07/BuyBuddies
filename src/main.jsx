@@ -19,6 +19,7 @@ import Statistics from "./Pages/Dashboard/Common/Statistics.jsx";
 import AddProduct from "./Pages/Dashboard/Seller/AddProduct.jsx";
 import MyInventory from "./Pages/Dashboard/Seller/MyInventory.jsx";
 import ManageUsers from "./Pages/Dashboard/Admin/ManageUsers.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
         element: <PrivateRoute> <MyProfile></MyProfile> </PrivateRoute>
       },
       {
-        path: "/productDetails",
+        path: "/productDetails/:id",
         element: <PrivateRoute> <ProductDetails></ProductDetails> </PrivateRoute>
       },
         {
@@ -74,10 +75,13 @@ const router = createBrowserRouter([
 
 ]);
 
+const queryClient = new QueryClient();
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
+    <QueryClientProvider client={queryClient}>
     <RouterProvider router={router} /> 
+    </QueryClientProvider>
     </AuthProvider>
   </StrictMode>
 );

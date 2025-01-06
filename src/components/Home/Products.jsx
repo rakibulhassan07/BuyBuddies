@@ -1,22 +1,26 @@
 
-import React from 'react';
+
 
 import Card from './Card';
 
+import useProducts from '../../Hook/useProducts';
+import { p } from 'framer-motion/client';
+
 const Products  = () => {
+    
+    const [products]= useProducts();
+  console.log(products);
+  
+
     return (
        <div> 
-        <div className='pt-12 grid grid-cols-3 gap-16'>
-         <Card></Card>
-         <Card></Card>
-         <Card></Card>
-         <Card></Card>
-         <Card></Card>
-         <Card></Card>
-         <Card></Card>
-         <Card></Card>
-         <Card></Card>
-        </div>
+  {
+    <div className='pt-12 grid grid-cols-3 gap-16'>
+      {products.map(product=>(
+        <Card key={product.id} product={product}></Card>
+      ))}
+   </div>
+  }
        </div>
     );
 };
