@@ -10,7 +10,6 @@ const Root = () => {
         <Navbar></Navbar>
         <div className="bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)] ">
           <Outlet></Outlet>
-           
         </div>
        
       

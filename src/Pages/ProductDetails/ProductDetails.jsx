@@ -1,14 +1,23 @@
-import React from 'react';
-import { CgLayoutGrid } from 'react-icons/cg';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useProducts from '../../Hook/useProducts';
+import PurchaseModal from '../../components/Model/PurchaseModal';
 
 const ProductDetails = () => {
-    const {id} = useParams()
-    const [products]= useProducts();
-    
-    const matchId = products.find((userId) => userId.id === id);
-    
+    const { id } = useParams();
+    const [products, loading] = useProducts();
+    const [isOpen, setIsOpen] = useState(false);
+
+  
+    const matchId = products.find((product) => product.id === id);
+
+    if (!matchId) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+               
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center">
@@ -16,7 +25,7 @@ const ProductDetails = () => {
                 <img
                     src={matchId.product_photo}
                     className="w-96 rounded-lg shadow-2xl" 
-                    alt="Product"
+                    alt={matchId.product_name}
                 />
                 <div className="">
                     <h1 className="text-5xl font-bold">{matchId.product_name}</h1>
@@ -24,17 +33,32 @@ const ProductDetails = () => {
                         {matchId.product_details}
                     </p>
                     <p className="py-6">
-                       price: {matchId.product_price
-                        }
+                        Price: {matchId.product_price}
                     </p>
                     <p className="py-6">
-                       Quantity: {matchId.product_quantity
-                        }
+                        Quantity: {matchId.product_quantity}
                     </p>
                     
-                    <button className="btn btn-primary">Purchase</button>
+                    {matchId.product_quantity > 0 ? (
+                        <button 
+                            className="btn btn-primary"
+                            onClick={() => setIsOpen(true)}
+                        >
+                            Purchase
+                        </button>
+                    ) : (
+                        <button className="btn btn-disabled bg-gray-500 text-white cursor-not-allowed hover:bg-gray-500">
+                            Out of Stock
+                        </button>
+                    )}
                 </div>
             </div>
+
+            <PurchaseModal 
+                isOpen={isOpen} 
+                setIsOpen={setIsOpen}
+                product={matchId}
+            />
         </div>
     );
 };

@@ -19,7 +19,10 @@ import Statistics from "./Pages/Dashboard/Common/Statistics.jsx";
 import AddProduct from "./Pages/Dashboard/Seller/AddProduct.jsx";
 import MyInventory from "./Pages/Dashboard/Seller/MyInventory.jsx";
 import ManageUsers from "./Pages/Dashboard/Admin/ManageUsers.jsx";
+import MyOrder from "./Pages/Dashboard/Customer/MyOrder.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ManageOrders from "./Pages/Dashboard/Seller/ManageOrders.jsx";
+import BecomeSeller from "./Pages/Dashboard/Common/BecomeSeller.jsx";
 
 const router = createBrowserRouter([
   {
@@ -65,6 +68,18 @@ const router = createBrowserRouter([
          {
           path: "manage-users",
           element: <PrivateRoute> <ManageUsers></ManageUsers> </PrivateRoute>
+         },
+         {
+          path: "my-order",
+          element: <PrivateRoute> <MyOrder></MyOrder>  </PrivateRoute>
+         },
+         {
+          path: "manage-orders",
+          element: <PrivateRoute> <ManageOrders></ManageOrders> </PrivateRoute>
+         },
+         {
+          path: "become-a-seller",
+          element: <PrivateRoute> <BecomeSeller></BecomeSeller> </PrivateRoute>
          },
 
         ],
