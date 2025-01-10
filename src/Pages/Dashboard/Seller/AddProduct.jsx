@@ -60,8 +60,6 @@ const AddProduct = () => {
 
     setLoading(true);
     try {
-     
-
       // First, fetch all products to check for duplicates
       const checkResponse = await fetch("http://localhost/BuyBuddies/index.php/api/product", {
         method: "GET",

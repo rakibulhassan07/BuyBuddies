@@ -10,6 +10,7 @@ const ProductDetails = () => {
 
   
     const matchId = products.find((product) => product.id === id);
+ 
 
     if (!matchId) {
         return (

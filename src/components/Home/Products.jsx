@@ -4,7 +4,7 @@
 import Card from './Card';
 
 import useProducts from '../../Hook/useProducts';
-import { p } from 'framer-motion/client';
+
 
 const Products  = () => {
     
