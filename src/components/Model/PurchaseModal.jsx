@@ -17,7 +17,6 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
   const [users] = useUsers();
   const { id } = useParams();
   const [products] = useProducts();
-  const [update, setUpdate] = useState();
   const {
     register,
     handleSubmit,
@@ -29,7 +28,7 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
   // Find customer and product data with null checks
   const customerData = users?.find((userEmail) => userEmail?.email === user?.email);
   const productData = products?.find((product) => product?.id === id);
-
+  
   useEffect(() => {
     if (!isOpen) {
       reset();
@@ -65,6 +64,8 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
         quantity: formData.quantity,
         price: totalPrice.toString(),
         status: "pending",
+        product_photo:productData.product_photo,
+        product_name: productData.product_name,
       
       };
       
@@ -78,8 +79,11 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
      
       
       // update product quantity
-      const updatedQuantity = parseInt(product_quantity) - totalQuantity;
-      console.log(updatedQuantity);
+      
+
+     
+     
+      
      alert("Order placed successfully!");
       setIsOpen(false);
       reset(); 
