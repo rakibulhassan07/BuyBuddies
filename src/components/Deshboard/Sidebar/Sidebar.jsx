@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <div className="h-full p-4">
-      <nav className="space-y-2 pt-9">
+    <div className="h-full p-4 bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)]">
+      <nav className="space-y-2 pt-9 ">
       <Link  to="my-order"
           className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
         My Order
