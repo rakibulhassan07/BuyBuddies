@@ -5,7 +5,7 @@ import PurchaseModal from '../../components/Model/PurchaseModal';
 
 const ProductDetails = () => {
     const { id } = useParams();
-    const [products, loading] = useProducts();
+    const [products] = useProducts();
     const [isOpen, setIsOpen] = useState(false);
 
   

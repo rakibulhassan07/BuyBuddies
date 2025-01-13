@@ -28,7 +28,7 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
   // Find customer and product data with null checks
   const customerData = users?.find((userEmail) => userEmail?.email === user?.email);
   const productData = products?.find((product) => product?.id === id);
-  
+  console.log(customerData);
   useEffect(() => {
     if (!isOpen) {
       reset();

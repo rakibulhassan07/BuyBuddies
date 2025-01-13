@@ -10,7 +10,7 @@ const MyOrder = () => {
   const { user } = useContext(AuthContext);
   const [users] = useUsers();
   const [orders, setOrders] = useOrder();
- 
+ console.log(orders);
   
   const customerData = users?.find(
     (userEmail) => userEmail?.email === user?.email
@@ -41,7 +41,7 @@ const MyOrder = () => {
           draggable: true,
           progress: undefined,
         });
-
+                                                                  
         // Remove the cancelled order from local state
         setOrders(orders.filter(order => order.id !== orderId));
       } else {
@@ -104,7 +104,7 @@ const MyOrder = () => {
           {useOrdered.map((orders) => ( 
             <tr className="text-center" key={orders.id}>
               <td className="p-3">
-                <img className="w-24" src={orders?.product_photo} alt="" />
+                <img className="w-20" src={orders?.product_photo} alt="" />
               </td>
               <td className="p-3">{orders?.product_name}</td>
               <td className="p-3">{orders?.price}</td>

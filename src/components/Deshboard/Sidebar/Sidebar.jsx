@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import BecomeSeller from "../../../Pages/Dashboard/Common/BecomeSeller";
 
 const Sidebar = () => {
   return (
@@ -11,7 +12,8 @@ const Sidebar = () => {
       </Link>
       <Link  to="become-a-seller"
           className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-        Become A Seller
+        Become A Seller 
+       
         </Link>
         <Link  to="add-product"
           className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
@@ -42,6 +44,7 @@ const Sidebar = () => {
        
     
       </nav>
+     
     </div>
   );
 };
