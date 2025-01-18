@@ -23,6 +23,8 @@ import MyOrder from "./Pages/Dashboard/Customer/MyOrder.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ManageOrders from "./Pages/Dashboard/Seller/ManageOrders.jsx";
 import BecomeSeller from "./Pages/Dashboard/Common/BecomeSeller.jsx";
+import SellerRoute from "./privateRoute/SellerRoute.jsx";
+import AdminRoute from "./privateRoute/AdminRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -54,20 +56,20 @@ const router = createBrowserRouter([
         element:<PrivateRoute> <DashboardLayout></DashboardLayout> </PrivateRoute>,
        children: [
          {
-             index:true,
-             element: <PrivateRoute> <Statistics></Statistics> </PrivateRoute>
+          path: "statistics",
+          element: <PrivateRoute> <AdminRoute><Statistics></Statistics></AdminRoute> </PrivateRoute>
          },
          {
           path: "add-product",
-          element: <PrivateRoute> <AddProduct></AddProduct> </PrivateRoute>
+          element: <PrivateRoute> <SellerRoute><AddProduct></AddProduct></SellerRoute>  </PrivateRoute>
          },
          {
           path: "my-invetory",
-          element: <PrivateRoute> <MyInventory></MyInventory> </PrivateRoute>
+          element: <PrivateRoute> <SellerRoute> <MyInventory></MyInventory></SellerRoute> </PrivateRoute>
          },
          {
           path: "manage-users",
-          element: <PrivateRoute> <ManageUsers></ManageUsers> </PrivateRoute>
+          element: <PrivateRoute>  <AdminRoute><ManageUsers></ManageUsers></AdminRoute>  </PrivateRoute>
          },
          {
           path: "my-order",
@@ -75,7 +77,7 @@ const router = createBrowserRouter([
          },
          {
           path: "manage-orders",
-          element: <PrivateRoute> <ManageOrders></ManageOrders> </PrivateRoute>
+          element: <PrivateRoute> <SellerRoute><ManageOrders></ManageOrders></SellerRoute>  </PrivateRoute>
          },
          {
           path: "become-a-seller",

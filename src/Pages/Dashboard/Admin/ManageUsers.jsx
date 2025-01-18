@@ -83,8 +83,7 @@ const ManageUsers = () => {
                 return <span className="text-yellow-600 font-medium">Pending Approval</span>;
             case 'seller':
                 return <span className="text-green-600 font-medium">Approved Seller</span>;
-            default:
-                return <span className="text-gray-600">Customer</span>;
+           
         }
     };
 

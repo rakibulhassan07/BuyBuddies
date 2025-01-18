@@ -104,13 +104,13 @@ const AddProduct = () => {
       });
       
       await response.json();
-      
-    } catch (error) {
-      console.error("Error:", error);
       Swal.fire({
         icon: "success",
         title: "Product Added Successfully"
       });
+    } catch (error) {
+      console.error("Error:", error);
+    
     } finally {
       setLoading(false);
     }

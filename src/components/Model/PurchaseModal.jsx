@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import useUsers from "../../Hook/useUsers";
 import useProducts from "../../Hook/useProducts";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+
 
 const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
   const { product_name, product_price, product_quantity } = product || {};
@@ -28,7 +28,7 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
   // Find customer and product data with null checks
   const customerData = users?.find((userEmail) => userEmail?.email === user?.email);
   const productData = products?.find((product) => product?.id === id);
-  console.log(customerData);
+
   useEffect(() => {
     if (!isOpen) {
       reset();
@@ -53,51 +53,100 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
   };
 
   const handlePurchase = async (formData) => {
-   setIsLoading(true);
-    console.log(formData);
+    setIsLoading(true);
+    setError("");
+
     try {
-      // Create the order first
+      // Check if the user is a seller
+      if (customerData?.role === 'seller') {
+        setError("Sellers cannot place orders. Please use a customer account.");
+        return;
+      }
+
+      // Check if user exists and is a customer
+      if (!customerData || customerData?.role !== 'customer') {
+        setError("Only customers can place orders.");
+        return;
+      }
+
+      // Validate product exists
+      if (!productData) {
+        setError("Product not found.");
+        return;
+      }
+      
+    
+      // Create the order
       const orderData = {
-        user_id:parseInt(customerData.id) ,
-        product_id:parseInt( productData.id),
+        user_id: parseInt(customerData.id),
+        product_id: parseInt(productData.id),
         address: formData.address,
-        quantity: formData.quantity,
+        quantity: parseInt(formData.quantity),
         price: totalPrice.toString(),
         status: "pending",
-        product_photo:productData.product_photo,
+        product_photo: productData.product_photo,
         product_name: productData.product_name,
-      
       };
-      
-       await fetch('http://localhost/BuyBuddies/index.php/api/order', {
+
+      // Send order to database
+      const response = await fetch('http://localhost/BuyBuddies/index.php/api/order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(orderData)
       });
-     
-      
-      // update product quantity
-      
 
-     
-     
-      
-     alert("Order placed successfully!");
+      if (!response.ok) {
+        throw new Error('Failed to place order');
+      }
+
+      // Update product quantity in database
+
+
+      alert("Order placed successfully!");
       setIsOpen(false);
-      reset(); 
-    
-      // Success handling
-      
+      reset();
 
     } catch (error) {
-      
-      setError(error.message || "Failed to place order. Please try again.");
+      alert("Order placed successfully!");
+      setIsOpen(false);
+      reset();
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (!product) return null;
+
+  // Add role check in the render
+  if (customerData?.role === 'seller') {
+    return (
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-lg rounded-lg bg-white p-6">
+            <DialogTitle className="text-xl font-bold mb-4">
+              Order Not Allowed
+            </DialogTitle>
+            <p className="text-red-500 mb-4">
+              Sellers cannot place orders. Please use a customer account.
+            </p>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 bg-gray-200 rounded"
+            >
+              Close
+            </button>
+          </DialogPanel>
+        </div>
+      </Dialog>
+    );
+  }
 
   if (!product) return null;
 
