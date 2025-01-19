@@ -1,11 +1,10 @@
 import React from 'react';
-import './AboutUs.css';  // Import the CSS file
-
+import './AboutUs.css';  
 const AboutUs = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 py-16">
+    <div className="min-h-screen bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)] from-blue-50 to-gray-100 py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header Section */}
+    
         <div className="text-center mb-16 animate-fadeIn">
           <h1 className="text-5xl font-extrabold text-gray-900 mb-6 animate-slideInDown">
             About BuyBuddies
@@ -15,7 +14,7 @@ const AboutUs = () => {
           </p>
         </div>
 
-        {/* Mission Section */}
+
         <div className="mb-16">
           <div className="bg-white rounded-xl shadow-lg p-8 lg:p-12 transition hover:shadow-2xl hover:scale-105 animate-fadeIn">
             <h2 className="text-3xl font-bold text-blue-600 mb-4">Our Mission</h2>
@@ -28,7 +27,7 @@ const AboutUs = () => {
           </div>
         </div>
 
-        {/* Team Section */}
+       
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center animate-slideInDown">Meet Our Team</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -81,7 +80,7 @@ const AboutUs = () => {
           </div>
         </div>
 
-        {/* Project Vision */}
+     
         <div className="mb-16">
           <div className="bg-gradient-to-r from-white to-blue-50 rounded-xl shadow-lg p-8 lg:p-12 animate-fadeIn">
             <h2 className="text-3xl font-bold text-blue-600 mb-4">Our Vision</h2>
@@ -107,7 +106,7 @@ const AboutUs = () => {
           </div>
         </div>
 
-        {/* Contact Section */}
+
         <div className="text-center animate-fadeIn">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Get In Touch</h2>
           <p className="text-gray-700 mb-6">

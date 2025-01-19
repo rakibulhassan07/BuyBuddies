@@ -10,8 +10,6 @@ const MyOrder = () => {
   const { user } = useContext(AuthContext);
   const [users] = useUsers();
   const [orders, setOrders] = useOrder();
- console.log(orders);
-  
   const customerData = users?.find(
     (userEmail) => userEmail?.email === user?.email
   );
@@ -19,7 +17,7 @@ const MyOrder = () => {
   const useOrdered = orders?.filter(
     (userProducts) => userProducts?.user_id === customerData?.id
   );
- 
+
   const handleCancel = async (orderId) => {
     try {
       // Confirm with user before cancelling
@@ -96,6 +94,7 @@ const MyOrder = () => {
             <th>Name</th>
             <th>Price</th>
             <th>Quantity</th>
+            <th>Address</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -107,8 +106,9 @@ const MyOrder = () => {
                 <img className="w-20" src={orders?.product_photo} alt="" />
               </td>
               <td className="p-3">{orders?.product_name}</td>
-              <td className="p-3">{orders?.price}</td>
+              <td className="p-3">${orders?.price}</td>
               <td className="p-3">{orders?.quantity}</td>
+              <td className="p-3">{orders?.address}</td>
               <td className="p-3 text-red-700">{orders?.status}</td>
               <td className="p-3">
                 {orders?.status === "pending" && (

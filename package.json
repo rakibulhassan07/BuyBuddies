@@ -27,6 +27,7 @@
     "react-sweetalert2": "^0.6.0",
     "react-toastify": "^10.0.6",
     "react-ui-cards": "^3.1.0",
+    "recharts": "^2.15.0",
     "sort-by": "^1.2.0",
     "ui-button": "^2.1.12"
   },
