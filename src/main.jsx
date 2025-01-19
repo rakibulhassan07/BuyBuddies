@@ -25,6 +25,7 @@ import ManageOrders from "./Pages/Dashboard/Seller/ManageOrders.jsx";
 import BecomeSeller from "./Pages/Dashboard/Common/BecomeSeller.jsx";
 import SellerRoute from "./privateRoute/SellerRoute.jsx";
 import AdminRoute from "./privateRoute/AdminRoute.jsx";
+import AboutUs from "./components/AboutUs/AboutUs.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
+      },
+      {
+        path: "/about",
+        element: <AboutUs></AboutUs> ,
       },
       {
         path: "/login",

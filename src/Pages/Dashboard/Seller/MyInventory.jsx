@@ -16,103 +16,112 @@ const MyInventory = () => {
     const useProduct = products?.filter(
         (userProducts) => userProducts?.user_id === customerData?.id
     );
-      
+
     const handleCancel = async (productId) => {
         try {
-            // Send DELETE request to backend
             const response = await axios.delete(
-              `http://localhost/BuyBuddies/index.php/api/product/${productId}`
+                `http://localhost/BuyBuddies/index.php/api/product/${productId}`
             );
-      
+
             if (response.data.message) {
-              // Show success toast
-              toast.success("Delete Product successfully!", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-                                                                        
-              // Remove the cancelled order from local state
-              setProducts(products.filter(product => product.id !== productId));
+                toast.success("Product deleted successfully!", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
+                setProducts(products.filter(product => product.id !== productId));
             } else {
-              // Show error toast if response doesn't contain success message
-              toast.error("Failed to Delete product. Please try again.", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
+                toast.error("Failed to delete product. Please try again.");
             }
-          } catch (error) {
-            console.error("Error delete product:", error);
-            // Show error toast for caught exceptions
-            toast.error("Error delete product: " + (error.response?.data?.error || "Unknown error"), {
-              position: "top-center",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          }
+        } catch (error) {
+            console.error("Error deleting product:", error);
+            toast.error("Error deleting product: " + (error.response?.data?.error || "Unknown error"));
+        }
     };
 
     return (
-        <div className="max-w-[80%] mx-auto">
-            <ToastContainer
-                position="top-center"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-                 
-            <h1 className="text-2xl font-semibold uppercase text-center m-5">My Products</h1>
-          
-            <table className="w-[100%]">
-                <thead>
-                    <tr>
-                        <th className="text-left">Image</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {useProduct.map((product) => ( 
-                        <tr className="text-center" key={product.id}>
-                            <td className="p-3">
-                                <img className="w-20" src={product?.product_photo} alt="" />
-                            </td>
-                            <td className="p-3">{product?.product_name}</td>
-                            <td className="p-3">{product?.product_price}</td>
-                            <td className="p-3">{product?.product_quantity}</td>
-                            <td className="p-3">
-                                <button
-                                    onClick={() => handleCancel(product.id)}
-                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition duration-200"
-                                >
-                                    Delete Product
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody> 
-            </table>
+        <div className="min-h-screenbg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)] py-8">
+            <ToastContainer />
+            
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900">My Inventory</h1>
+                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm">
+                        <CgLayoutGrid className="text-gray-500" size={20} />
+                        <span className="text-gray-600">
+                            {useProduct.length} Products
+                        </span>
+                    </div>
+                </div>
+
+                {useProduct.length === 0 ? (
+                    <div className="text-center py-12">
+                        <p className="text-gray-500 text-lg">No products in your inventory</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {useProduct.map((product) => (
+                            <div 
+                                key={product.id} 
+                                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                            >
+                                <div className="relative">
+                                    <img 
+                                        src={product.product_photo} 
+                                        alt={product.product_name}
+                                        className="w-full h-64 object-cover"
+                                    />
+                                    <div className="absolute top-4 right-4">
+                                        <span className="bg-white px-3 py-1 rounded-full text-sm font-medium text-gray-600 shadow-sm">
+                                            ${product.product_price}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="p-6">
+                                    <div className="mb-4">
+                                        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                                            {product.product_name}
+                                        </h2>
+                                        <div className="flex items-center gap-2 text-gray-600">
+                                            <span className="text-sm">Stock:</span>
+                                            <span className={`px-2 py-1 rounded-full text-sm ${
+                                                product.product_quantity > 0 
+                                                    ? 'bg-green-100 text-green-800' 
+                                                    : 'bg-red-100 text-red-800'
+                                            }`}>
+                                                {product.product_quantity} units
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-between items-center">
+                                        <button
+                                            onClick={() => handleCancel(product.id)}
+                                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center gap-2"
+                                        >
+                                            <svg 
+                                                className="w-4 h-4" 
+                                                fill="none" 
+                                                stroke="currentColor" 
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                            Delete Product
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

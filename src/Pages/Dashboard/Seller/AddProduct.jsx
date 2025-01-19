@@ -23,13 +23,13 @@ const AddProduct = () => {
 
   // Handle image upload
   const handleImageUpload = async (event) => {
-    
     const file = event.target.files[0];
+    if (!file) return;
+
     const formData = new FormData();
     formData.append("image", file);
-    const url = `https://api.imgbb.com/1/upload?key=${
-      import.meta.env.VITE_IMGBB_API_KEY
-    }`;
+    const url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`;
+    
     try {
       setLoading(true);
       const response = await fetch(url, {
@@ -52,25 +52,16 @@ const AddProduct = () => {
     } finally {
       setLoading(false);
     }
-  
   };
 
   // Form submission
   const onSubmit = async (data) => {
-
     setLoading(true);
     try {
-      // First, fetch all products to check for duplicates
-      const checkResponse = await fetch("http://localhost/BuyBuddies/index.php/api/product", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        }
-      });
-      
+      // Check for duplicates
+      const checkResponse = await fetch("http://localhost/BuyBuddies/index.php/api/product");
       const existingProducts = await checkResponse.json();
-      console.log(existingProducts);
-      // Check if product name already exists
+      
       const isDuplicate = existingProducts.some(
         product => product.product_name.toLowerCase() === data.product_name.toLowerCase()
       );
@@ -85,7 +76,7 @@ const AddProduct = () => {
         return;
       }
 
-      // If no duplicate, proceed with adding the product
+      // Add product
       const productData = {
         product_photo: imageUrl,
         product_name: data.product_name,
@@ -108,109 +99,136 @@ const AddProduct = () => {
         icon: "success",
         title: "Product Added Successfully"
       });
+      reset();
+      setImageUrl("");
     } catch (error) {
       console.error("Error:", error);
-    
+      Swal.fire({
+        icon: "error",
+        title: "Error adding product"
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
+    <div className="min-h-screen bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)] py-8">
+      <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
+        <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">Add New Product</h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Image Upload */}
-        <div>
-          <label className="block mb-2">Product Image</label>
-           {imageUrl && (
-            <img
-              src={imageUrl}
-              alt="Product"
-              className="mt-2 w-20 h-20 object-cover"
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Image Upload */}
+          <div className="space-y-2">
+            <label className="text-gray-700 font-medium block mb-1">Product Image</label>
+            <div className="flex flex-col items-center space-y-4">
+              {imageUrl && (
+                <div className="relative">
+                  <img
+                    src={imageUrl}
+                    alt="Product"
+                    className="w-40 h-40 object-cover rounded-lg shadow-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setImageUrl("")}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+              <input
+                type="file"
+                onChange={handleImageUpload}
+                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                accept="image/*"
+              />
+            </div>
+          </div>
+
+          {/* Product Name */}
+          <div className="space-y-1">
+            <label className="text-gray-700 font-medium block">Product Name</label>
+            <input
+              {...register("product_name", {
+                required: "Product name is required",
+              })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
             />
-          )}
-          <input
-            type="file"
-            
-            onChange={handleImageUpload}
-            className="w-full p-2 border rounded"
-          />
-         
-        </div>
+            {errors.product_name && (
+              <p className="text-red-500 text-sm mt-1">{errors.product_name.message}</p>
+            )}
+          </div>
 
-        {/* Product Name */}
-        <div>
-          <label className="block mb-2">Product Name</label>
-          <input
-            {...register("product_name", {
-              required: "Product name is required",
-            })}
-            className="w-full p-2 border rounded"
-          />
-          {errors.product_name && (
-            <p className="text-red-500">{errors.product_name.message}</p>
-          )}
-        </div>
+          {/* Price and Quantity Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Price */}
+            <div className="space-y-1">
+              <label className="text-gray-700 font-medium block">Price</label>
+              <input
+                type="number"
+                step="0.01"
+                {...register("product_price", {
+                  required: "Price is required",
+                  min: { value: 0, message: "Price must be positive" },
+                })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
+              {errors.product_price && (
+                <p className="text-red-500 text-sm mt-1">{errors.product_price.message}</p>
+              )}
+            </div>
 
-        {/* Price */}
-        <div>
-          <label className="block mb-2">Price</label>
-          <input
-            type="number"
-            step="0.01"
-            {...register("product_price", {
-              required: "Price is required",
-              min: { value: 0, message: "Price must be positive" },
-            })}
-            className="w-full p-2 border rounded"
-          />
-          {errors.product_price && (
-            <p className="text-red-500">{errors.product_price.message}</p>
-          )}
-        </div>
+            {/* Quantity */}
+            <div className="space-y-1">
+              <label className="text-gray-700 font-medium block">Quantity</label>
+              <input
+                type="number"
+                {...register("product_quantity", {
+                  required: "Quantity is required",
+                  min: { value: 0, message: "Quantity must be positive" },
+                })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
+              {errors.product_quantity && (
+                <p className="text-red-500 text-sm mt-1">{errors.product_quantity.message}</p>
+              )}
+            </div>
+          </div>
 
-        {/* Quantity */}
-        <div>
-          <label className="block mb-2">Quantity</label>
-          <input
-            type="number"
-            {...register("product_quantity", {
-              required: "Quantity is required",
-              min: { value: 0, message: "Quantity must be positive" },
-            })}
-            className="w-full p-2 border rounded"
-          />
-          {errors.product_quantity && (
-            <p className="text-red-500">{errors.product_quantity.message}</p>
-          )}
-        </div>
+          {/* Product Details */}
+          <div className="space-y-1">
+            <label className="text-gray-700 font-medium block">Product Details</label>
+            <textarea
+              {...register("product_details", {
+                required: "Product details are required",
+              })}
+              rows="4"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+            />
+            {errors.product_details && (
+              <p className="text-red-500 text-sm mt-1">{errors.product_details.message}</p>
+            )}
+          </div>
 
-        {/* Product Details */}
-        <div>
-          <label className="block mb-2">Product Details</label>
-          <textarea
-            {...register("product_details", {
-              required: "Product details are required",
-            })}
-            className="w-full p-2 border rounded"
-            rows="4"
-          />
-          {errors.product_details && (
-            <p className="text-red-500">{errors.product_details.message}</p>
-          )}
-        </div>
-
-        {/* Submit Button */}
-        <button type="submit" className="btn btn-primary">
-          {loading ? (
-            <TbFidgetSpinner className="animate-spin h-5 w-5" />
-          ) : (
-            "Add Product"
-          )}
-        </button>
-      </form>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <TbFidgetSpinner className="animate-spin h-5 w-5 mr-2" />
+                <span>Processing...</span>
+              </div>
+            ) : (
+              "Add Product"
+            )}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
