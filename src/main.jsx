@@ -53,6 +53,10 @@ const router = createBrowserRouter([
         element: <PrivateRoute> <MyProfile></MyProfile> </PrivateRoute>
       },
       {
+        path: "/cart",
+        element: <PrivateRoute> <MyOrder></MyOrder> </PrivateRoute>
+       },
+      {
         path: "/productDetails/:id",
         element: <PrivateRoute> <ProductDetails></ProductDetails> </PrivateRoute>
       },
@@ -76,10 +80,7 @@ const router = createBrowserRouter([
           path: "manage-users",
           element: <PrivateRoute>  <AdminRoute><ManageUsers></ManageUsers></AdminRoute>  </PrivateRoute>
          },
-         {
-          path: "my-order",
-          element: <PrivateRoute> <MyOrder></MyOrder>  </PrivateRoute>
-         },
+       
          {
           path: "manage-orders",
           element: <PrivateRoute> <SellerRoute><ManageOrders></ManageOrders></SellerRoute>  </PrivateRoute>

@@ -56,12 +56,7 @@ const Sidebar = () => {
       case 'customer':
         return (
           <>
-            <Link
-              to="my-order"
-              className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              My Order
-            </Link>
+           
             <Link
               to="become-a-seller"
               className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"

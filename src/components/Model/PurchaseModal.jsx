@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 
 
 const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
+  
   const { product_name, product_price, product_quantity } = product || {};
   const { user } = useContext(AuthContext);
   const [totalQuantity, setTotalQuantity] = useState(1);
@@ -236,7 +237,7 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
                 className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
                 disabled={isLoading}
               >
-                {isLoading ? 'Processing...' : `Confirm Purchase ($${totalPrice})`}
+                {isLoading ? 'Processing...' : `ADD Quantity and Address`}
               </button>
             </div>
           </form>

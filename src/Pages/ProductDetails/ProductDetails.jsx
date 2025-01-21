@@ -92,7 +92,7 @@ const ProductDetails = () => {
                                     onClick={() => setIsOpen(true)}
                                     className="w-full bg-blue-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-blue-700 transform hover:-translate-y-1 transition-all duration-200 shadow-lg hover:shadow-xl"
                                 >
-                                    Purchase Now
+                                   ADD To Cart
                                 </button>
                             ) : (
                                 <button 
