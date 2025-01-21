@@ -11,66 +11,102 @@ const Card = ({ product }) => {
     id,
   } = product;
 
-  const cardStyle = {
-    transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease',
-    animation: 'card-hover 0.5s ease-in-out',
+  // Handle mouse move for 3D effect
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = (y - centerY) / 20;
+    const rotateY = -(x - centerX) / 20;
+
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
   };
 
-  const hoverStyle = {
-    transform: 'rotateY(10deg) scale(1.05)',
-    boxShadow: '0px 20px 40px rgba(0, 0, 0, 0.2)',
+  // Handle mouse leave
+  const handleMouseLeave = (e) => {
+    const card = e.currentTarget;
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
   };
-
-  const animationKeyframes = `
-    @keyframes card-hover {
-      0% {
-        transform: rotateY(0) scale(1);
-      }
-      50% {
-        transform: rotateY(10deg) scale(1.05);
-      }
-      100% {
-        transform: rotateY(0) scale(1);
-      }
-    }
-  `;
 
   return (
     <div className="w-96">
-      <style>{animationKeyframes}</style> {/* Inline keyframes */}
-      <Link to={`/productDetails/${id}`}>
-        <div
-          className="card bg-base-100 shadow-xl group h-[600px] flex flex-col"
-          style={cardStyle}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'rotateY(10deg) scale(1.05)';
-            e.currentTarget.style.boxShadow = '0px 20px 40px rgba(0, 0, 0, 0.2)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'rotateY(0) scale(1)';
-            e.currentTarget.style.boxShadow = 'none';
-          }}
+      <div
+        className="relative bg-gray-50 dark:bg-black border border-black/[0.1] dark:border-white/[0.2] rounded-xl p-6 h-[600px] flex flex-col transform-gpu transition-all duration-300 ease-out hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1]"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          transformStyle: 'preserve-3d',
+        }}
+      >
+        <h2 
+          className="text-2xl font-bold text-neutral-600 dark:text-white line-clamp-2"
+          style={{ transform: 'translateZ(50px)' }}
         >
-          <figure className="px-10 pt-10 h-64 overflow-hidden">
-            <img
-              src={product_photo}
-              alt={product_name}
-              className="rounded-xl w-full h-full object-cover group-hover:scale-110 transition duration-300"
-            />
-          </figure>
-          <div className="card-body items-center text-center flex-1 flex flex-col">
-            <h2 className="font-bold text-2xl line-clamp-2">{product_name}</h2>
-            <h2 className="font-bold text-xl">Price: ${product_price}</h2>
-            <h2 className="font-bold text-xl">Quantity: {product_quantity}</h2>
-            <p className="text-lg line-clamp-3 flex-1">{product_details}</p>
-            <div className="card-actions mt-auto">
-              <Link to={`/productDetails/${id}`} className="btn btn-primary">
-                Details
-              </Link>
-            </div>
-          </div>
+          {product_name}
+        </h2>
+
+        <div 
+          className="w-full mt-4"
+          style={{ transform: 'translateZ(100px)' }}
+        >
+          <img
+            src={product_photo}
+            alt={product_name}
+            className="h-60 w-full object-cover rounded-xl shadow-md group-hover:shadow-xl"
+          />
         </div>
-      </Link>
+
+  
+        <div 
+          className="mt-4 space-y-2"
+          style={{ transform: 'translateZ(60px)' }}
+        >
+          <p className="text-xl font-bold text-neutral-600 dark:text-white">
+            Price: ${product_price}
+          </p>
+          <p className="text-xl font-bold text-neutral-600 dark:text-white">
+            Quantity: {product_quantity}
+          </p>
+          <p 
+          className="text-neutral-500 text-lg mt-2 dark:text-neutral-300 line-clamp-2"
+          style={{ transform: 'translateZ(60px)' }}
+        >
+          {product_details}
+        </p>
+        </div>
+
+        <div 
+          className="mt-auto flex justify-between items-center"
+          style={{ transform: 'translateZ(20px)' }}
+        >
+        
+          <Link
+            to={`/productDetails/${id}`}
+            className="px-4 py-2 rounded-xl bg-black text-white dark:bg-white dark:text-black text-sm font-bold hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
+          >
+            Buy Now
+          </Link>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @property --rotate-x {
+          syntax: '<angle>';
+          initial-value: 0deg;
+          inherits: false;
+        }
+        
+        @property --rotate-y {
+          syntax: '<angle>';
+          initial-value: 0deg;
+          inherits: false;
+        }
+      `}</style>
     </div>
   );
 };

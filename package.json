@@ -13,8 +13,9 @@
     "@headlessui/react": "^2.2.0",
     "@tanstack/react-query": "^4.36.1",
     "axios": "^1.7.9",
+    "clsx": "^2.1.1",
     "firebase": "^11.0.2",
-    "framer-motion": "^11.13.1",
+    "framer-motion": "^11.18.2",
     "localforage": "^1.10.0",
     "match-sorter": "^8.0.0",
     "react": "^18.3.1",
@@ -29,6 +30,7 @@
     "react-ui-cards": "^3.1.0",
     "recharts": "^2.15.0",
     "sort-by": "^1.2.0",
+    "tailwind-merge": "^2.6.0",
     "ui-button": "^2.1.12"
   },
   "devDependencies": {
