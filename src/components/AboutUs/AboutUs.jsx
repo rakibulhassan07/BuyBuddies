@@ -38,7 +38,6 @@ const AboutUs = () => {
                 description:
                   'Bridges frontend and backend development. Implements security features and ensures seamless integration across the platform.',
                 color: 'bg-blue-100 text-blue-600',
-                image: 'https://i.ibb.co.com/2YcknFK/20241225-202138.jpg',
               },
               {
                 name: 'Noman',
