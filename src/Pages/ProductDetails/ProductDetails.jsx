@@ -2,13 +2,20 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useProducts from '../../Hook/useProducts';
 import PurchaseModal from '../../components/Model/PurchaseModal';
+import useReviews from '../../Hook/useReviews';
+import useUsers from '../../Hook/useUsers';
+
 
 const ProductDetails = () => {
     const { id } = useParams();
     const [products] = useProducts();
+    const [reviews]=useReviews();
+    const [users]=useUsers();
+    
     const [isOpen, setIsOpen] = useState(false);
     const matchId = products.find((product) => product.id === id);
-
+    const filteredreviews = reviews.filter(review =>review.product_id===matchId.id);
+    
     if (!matchId) {
         return (
             <div className="min-h-screen flex items-center justify-center">
@@ -18,7 +25,27 @@ const ProductDetails = () => {
             </div>
         );
     }
-
+    const StarRating = ({ rating }) => {
+        return (
+            <div className="flex">
+                {[...Array(5)].map((star, index) => {
+                    const ratingValue = index + 1;
+                    return (
+                        <span 
+                            key={index} 
+                            className={`text-xl ${
+                                ratingValue <= rating 
+                                    ? 'text-yellow-500' 
+                                    : 'text-gray-300'
+                            }`}
+                        >
+                            ★
+                        </span>
+                    );
+                })}
+            </div>
+        );
+    };
     return (
         <div className="min-h-screen bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)] from-gray-50 to-white py-12 px-4">
             <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -102,9 +129,33 @@ const ProductDetails = () => {
                                     Out of Stock
                                 </button>
                             )}
+                            
                         </div>
                     </div>
+                    
                 </div>
+               <div className='text-center mt-8 pl-8 pr-8'>
+                <h2 className='text-2xl font-semibold mb-8'>CUSTOMER REVIEW</h2>
+                {filteredreviews.length === 0 ? (
+                        <p className="text-gray-500 italic">No reviews yet for this product</p>
+                    ) : (
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
+                            {filteredreviews.map((review, index) => (
+                                <div 
+                                    key={index} 
+                                    className="bg-gray-50 rounded-xl p-6 shadow-md"
+                                >
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h3 className="font-semibold">{review.name}</h3>
+                                        <StarRating rating={review.rating} />
+                                    </div>
+                                    <p className="text-gray-700 italic text-sm">"{review.comment}"</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+               </div>
+
             </div>
 
             <PurchaseModal 

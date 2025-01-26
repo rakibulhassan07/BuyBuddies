@@ -11,10 +11,10 @@ const Navbar = () => {
   };
 
   return (
-    <div className="sticky top-0 z-50 bg-orange-200 backdrop-blur-lg shadow-md p-4 flex items-center justify-between">
+    <div className="sticky top-0 z-50 bg-gradient-to-r from-[#185a9d] via-[#43cea2] to-[#185a9d] backdrop-blur-lg shadow-md p-4 flex items-center justify-between">
       {/* Logo on the left */}
       <div>
-        <a className="btn btn-ghost text-xl">BuyBuddies</a>
+       <img className="w-32" src={'https://i.ibb.co.com/gmQyfcd/Adobe-Express-file-1.png'} alt="" />
       </div>
 
       {/* Centered Navigation Links */}

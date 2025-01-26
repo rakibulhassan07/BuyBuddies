@@ -8,11 +8,10 @@ const Root = () => {
   return (
     <div>
         <Navbar></Navbar>
-        <div className="bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)] ">
+        <BreakingNews></BreakingNews>
+        <div className="bg-[linear-gradient(135deg,_#FFDEE9_0%,_#B5FFFC_100%)] ">
           <Outlet></Outlet>
         </div>
-       
-      
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router-dom";
 import PayModal from "./PayModal";
+import ReviewModal from "./ReviewModal";
 import { CgLayoutGrid } from "react-icons/cg";
 
 const MyOrder = () => {
@@ -15,14 +16,15 @@ const MyOrder = () => {
   const [users] = useUsers();
   const { id } = useParams();
   const [products] = useProducts();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isPayModalOpen, setIsPayModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [orders, setOrders] = useOrder();
   const [selectedOrder, setSelectedOrder] = useState(null);
   const matchId = products.find((product) => product.id === id);
   const customerData = users?.find(
     (userEmail) => userEmail?.email === user?.email
   );
-  
+
   const useOrdered = orders?.filter(
     (userProducts) => userProducts?.user_id === customerData?.id
   );
@@ -37,13 +39,9 @@ const MyOrder = () => {
         toast.success("Order cancelled successfully!", {
           position: "top-center",
           autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
         });
-        
-        setOrders(orders.filter(order => order.id !== orderId));
+
+        setOrders(orders.filter((order) => order.id !== orderId));
       } else {
         toast.error("Failed to cancel order. Please try again.", {
           position: "top-center",
@@ -52,10 +50,14 @@ const MyOrder = () => {
       }
     } catch (error) {
       console.error("Error cancelling order:", error);
-      toast.error("Error cancelling order: " + (error.response?.data?.error || "Unknown error"), {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toast.error(
+        "Error cancelling order: " +
+          (error.response?.data?.error || "Unknown error"),
+        {
+          position: "top-center",
+          autoClose: 3000,
+        }
+      );
     }
   };
 
@@ -63,22 +65,20 @@ const MyOrder = () => {
     try {
       const response = await axios.post(
         `http://localhost/BuyBuddies/index.php/api/order/${orderId}`,
-        { status: 'paid' }
+        { status: "paid" }
       );
 
       if (response.data.message) {
         toast.success("Payment successful!", {
           position: "top-center",
           autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
         });
 
-        setOrders(orders.map(order => 
-          order.id === orderId ? {...order, status: 'paid'} : order
-        ));
+        setOrders(
+          orders.map((order) =>
+            order.id === orderId ? { ...order, status: "paid" } : order
+          )
+        );
       } else {
         toast.error("Payment failed. Please try again.", {
           position: "top-center",
@@ -87,23 +87,43 @@ const MyOrder = () => {
       }
     } catch (error) {
       console.error("Error processing payment:", error);
-      toast.error("Error processing payment: " + (error.response?.data?.error || "Unknown error"), {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toast.error(
+        "Error processing payment: " +
+          (error.response?.data?.error || "Unknown error"),
+        {
+          position: "top-center",
+          autoClose: 3000,
+        }
+      );
     }
+  };
+
+  const handleOpenReviewModal = (order) => {
+    setSelectedOrder(order);
+    setIsReviewModalOpen(true);
+  };
+
+  const handleReviewSubmit = (orderId) => {
+    // Optional: Update order to mark as reviewed
+    setOrders(
+      orders.map((order) =>
+        order.id === orderId ? { ...order, reviewed: true } : order
+      )
+    );
   };
 
   return (
     <div className="min-h-screen bg-[linear-gradient(90deg,_#e7ffd9_0%,_#d9d3ff_100%)] py-8">
       <ToastContainer />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">My Orders</h1>
           <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm">
             <CgLayoutGrid className="text-gray-500" size={20} />
-            <span className="text-gray-600">{useOrdered?.length || 0} Orders</span>
+            <span className="text-gray-600">
+              {useOrdered?.length || 0} Orders
+            </span>
           </div>
         </div>
 
@@ -131,7 +151,8 @@ const MyOrder = () => {
                           {order.product_name}
                         </h2>
                         <p className="text-gray-600">
-                          Status: <span className="text-red-700">{order.status}</span>
+                          Status:{" "}
+                          <span className="text-red-700">{order.status}</span>
                         </p>
                       </div>
                     </div>
@@ -150,38 +171,49 @@ const MyOrder = () => {
                       Address: {order.address}
                     </div>
 
-                    {order.status === "pending" && (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => {
-                            setSelectedOrder(order);
-                            setIsOpen(true);
-                          }}
-                          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200"
-                        >
-                          Pay Now
-                        </button>
-                        <button
-                          onClick={() => handleCancel(order.id)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center gap-2"
-                        >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                    <div className="flex gap-2">
+                      {order.status === "pending" && (
+                        <>
+                          <button
+                            onClick={() => {
+                              setSelectedOrder(order);
+                              setIsPayModalOpen(true);
+                            }}
+                            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                          Cancel Order
+                            Pay Now
+                          </button>
+                          <button
+                            onClick={() => handleCancel(order.id)}
+                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center gap-2"
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                            </svg>
+                            Cancel Order
+                          </button>
+                        </>
+                      )}
+
+                      {order.status === "completed" && !order.reviewed && (
+                        <button
+                          onClick={() => handleOpenReviewModal(order)}
+                          className="bg-orange-600   px-4 py-2 rounded-lg transition duration-200"
+                        >
+                           Review
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -191,9 +223,16 @@ const MyOrder = () => {
       </div>
 
       <PayModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
+        isOpen={isPayModalOpen}
+        setIsOpen={setIsPayModalOpen}
         selectedOrder={selectedOrder}
+      />
+
+      <ReviewModal
+        isOpen={isReviewModalOpen}
+        setIsOpen={setIsReviewModalOpen}
+        selectedOrder={selectedOrder}
+        onReviewSubmit={handleReviewSubmit}
       />
     </div>
   );

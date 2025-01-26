@@ -34,7 +34,7 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
     if (!isOpen) {
       reset();
       setTotalQuantity(1);
-      setTotalPrice(product_price);
+      setTotalPrice(product_price *0.9);
       setError("");
     }
   }, [isOpen, product_price, reset]);
@@ -50,7 +50,7 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
       setError("");
       setTotalQuantity(value);
     }
-    setTotalPrice(value * product_price);
+    setTotalPrice(value * product_price*0.9 );
   };
 
   const handlePurchase = async (formData) => {
