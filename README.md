@@ -85,6 +85,7 @@ VALUES (?, ?, ?, ?, ?, ?);
 - **Role-Based Access Control**: Implemented Firebase authentication.
 
 ## Screenshots
+Click here: https://github.com/rakibulhassan07/BuyBuddies/tree/main/web-Pic
 (See the repository for images showcasing various project features.)
 
 ## Installation Guide
