@@ -32,7 +32,7 @@ const MyOrder = () => {
   const handleCancel = async (orderId) => {
     try {
       const response = await axios.delete(
-        `${process.env.REAC_APP_BACKEND_URL}/order/${orderId}`
+        `http://localhost/BuyBuddies/index.php/api/order/${orderId}`
       );
 
       if (response.data.message) {

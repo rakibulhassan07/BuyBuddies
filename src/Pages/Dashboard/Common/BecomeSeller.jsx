@@ -15,7 +15,7 @@ const BecomeSeller = () => {
   const handleBecomeSeller = async () => {
     const userId = customerData.id;
     try {
-        const response = await fetch(`${process.env.REAC_APP_BACKEND_URL}/users/seller-request`, {
+        const response = await fetch('http://localhost/BuyBuddies/index.php/api/users/seller-request', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

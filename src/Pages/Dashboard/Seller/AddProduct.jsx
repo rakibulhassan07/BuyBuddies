@@ -59,7 +59,7 @@ const AddProduct = () => {
     setLoading(true);
     try {
       // Check for duplicates
-      const checkResponse = await fetch(`${process.env.REAC_APP_BACKEND_URL}/product`);
+      const checkResponse = await fetch("http://localhost/BuyBuddies/index.php/api/product");
       const existingProducts = await checkResponse.json();
       
       const isDuplicate = existingProducts.some(
@@ -86,7 +86,7 @@ const AddProduct = () => {
         user_id: parseInt(userExist.id),
       };
 
-      const response = await fetch(`${process.env.REAC_APP_BACKEND_URL}/product`, {
+      const response = await fetch("http://localhost/BuyBuddies/index.php/api/product", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

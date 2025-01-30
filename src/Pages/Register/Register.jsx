@@ -64,7 +64,7 @@ const Register = () => {
                 password: data.password,
                 role: "customer",
               };
-              fetch(`${process.env.REAC_APP_BACKEND_URL}/users`, {
+              fetch("http://localhost/BuyBuddies/index.php/api/users", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

@@ -27,7 +27,7 @@ const PayModal = ({ isOpen, setIsOpen, selectedOrder }) => {
     try {
       // First create payment record
       const paymentResponse = await axios.post(
-       ` ${process.env.REAC_APP_BACKEND_URL}/payment`,
+        'http://localhost/BuyBuddies/index.php/api/payment',
         {
           user_id: customerData?.id,
           payment_method: paymentMethod,

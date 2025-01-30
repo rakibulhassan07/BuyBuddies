@@ -20,7 +20,7 @@ const ReviewModal = ({ isOpen, setIsOpen, selectedOrder, onReviewSubmit }) => {
 
     try {
       const response = await axios.post(
-        `${process.env.REAC_APP_BACKEND_URL}/reviews`, 
+        'http://localhost/BuyBuddies/index.php/api/reviews', 
         {
           order_id: selectedOrder.id,
           product_id: selectedOrder.product_id,
