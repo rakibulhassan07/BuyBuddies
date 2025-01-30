@@ -90,7 +90,7 @@ const PurchaseModal = ({ isOpen, setIsOpen, product }) => {
       };
 
       // Send order to database
-      const response = await fetch(`${process.env.REAC_APP_BACKEND_URL}/order`, {
+      const response = await fetch('http://localhost/BuyBuddies/index.php/api/order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

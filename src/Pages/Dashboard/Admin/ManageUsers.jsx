@@ -12,7 +12,7 @@ const ManageUsers = () => {
     const handleRoleUpdateAdmin = async (userId, newRole) => {
         setLoading(true);
         try {
-            const response = await fetch(`${process.env.REAC_APP_BACKEND_URL}/users/update-role`, {
+            const response = await fetch('http://localhost/BuyBuddies/index.php/api/users/update-role', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
