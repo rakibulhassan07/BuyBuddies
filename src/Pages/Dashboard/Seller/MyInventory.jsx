@@ -23,7 +23,7 @@ const MyInventory = () => {
   const handleUpdateProduct = async (productId, updatedData) => {
     try {
       const response = await axios.put(
-        `http://localhost/BuyBuddies/index.php/api/product/${productId}`,
+        `${process.env.REAC_APP_BACKEND_URL}/product/${productId}`,
         updatedData
       );
 
@@ -58,7 +58,7 @@ const MyInventory = () => {
     
     try {
       const response = await axios.delete(
-        `http://localhost/BuyBuddies/index.php/api/product/${productId}`
+        `${process.env.REAC_APP_BACKEND_URL}/product/${productId}`
       );
 
       if (response.data.message) {

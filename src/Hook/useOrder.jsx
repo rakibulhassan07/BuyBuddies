@@ -10,7 +10,7 @@ const useOrder = () => {
                 queryKey: ["order"],
                 queryFn: async () => {
                   const res = await fetch(
-                    "http://localhost/BuyBuddies/index.php/api/order"
+                    `${process.env.REAC_APP_BACKEND_URL}order`
                   );
                   return res.json();
                 },

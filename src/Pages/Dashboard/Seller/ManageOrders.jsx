@@ -18,7 +18,7 @@ const ManageOrders = () => {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       const response = await axios.post(
-        `http://localhost/BuyBuddies/index.php/api/order/${orderId}`,
+        `${process.env.REAC_APP_BACKEND_URL}/order/${orderId}`,
         { status: newStatus }
       );
 
@@ -47,7 +47,7 @@ const ManageOrders = () => {
   const handleCancel = async (orderId) => {
     try {
       const response = await axios.delete(
-        `http://localhost/BuyBuddies/index.php/api/order/${orderId}`
+        `${process.env.REAC_APP_BACKEND_URL}/order/${orderId}`
       );
 
       if (response.data.message) {

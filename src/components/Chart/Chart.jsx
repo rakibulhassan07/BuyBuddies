@@ -8,7 +8,7 @@ const Chart = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get('http://localhost/BuyBuddies/index.php/api/daily-stats');
+        const response = await axios.get(`${process.env.REAC_APP_BACKEND_URL}/daily-stats`);
         const formattedData = response.data.map(stat => ({
           date: new Date(stat.date).toLocaleDateString(),
           orders: stat.orders,

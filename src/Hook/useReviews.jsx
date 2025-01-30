@@ -10,7 +10,7 @@ const useReviews = () => {
          queryKey: ["reviews"],
          queryFn: async () => {
            const res = await fetch(
-             "http://localhost/BuyBuddies/index.php/api/reviews"
+             `${process.env.REAC_APP_BACKEND_URL}/reviews`
            );
            return res.json();
          },

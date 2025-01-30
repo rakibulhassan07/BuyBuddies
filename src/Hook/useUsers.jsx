@@ -9,7 +9,7 @@ const useUsers = () => {
   } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await fetch("http://localhost/BuyBuddies/index.php/api/users");
+      const res = await fetch(`${process.env.REAC_APP_BACKEND_URL}/users`);
       return res.json();
     },
   });
