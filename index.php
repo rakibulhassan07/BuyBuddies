@@ -11,7 +11,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Database connection
-$connection = new mysqli('localhost', 'root', '', 'BuyBuddies');
+$connection = new mysqli('mysql.railway.internal', 'root', 'HATKcKJGzlBrmWydXeCGtTmHGvOygzzL', 'railway', 3306);
 function updateDailyStats($connection, $quantity, $price) {
     $today = date('Y-m-d');
     // insert new record for today
