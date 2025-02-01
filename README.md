@@ -20,9 +20,9 @@
 BuyBuddies is a student-driven e-commerce platform designed for seamless and secure online shopping. Built with accessibility and innovation in mind, it provides a smooth user experience with robust security features.
 
 ## Team
-- **Rakibul Hassan** (`https://github.com/rakibulhassan07`)
+- **Rakibul Hassan** (https://github.com/rakibulhassan07)
 - **Mahathir Mohammad** (`___`)
-- **Abdullah Al Noman** (`https://github.com/No-man1234`)
+- **Abdullah Al Noman** (https://github.com/No-man1234)
 
 ## Key Features
 - **Role-Based Access Control**: Admins, sellers, and customers get tailored dashboards.
@@ -85,7 +85,7 @@ VALUES (?, ?, ?, ?, ?, ?);
 - **Role-Based Access Control**: Implemented Firebase authentication.
 
 ## Screenshots
-Click here: `https://github.com/rakibulhassan07/BuyBuddies/tree/main/web-Pic`
+Click here: https://github.com/rakibulhassan07/BuyBuddies/tree/main/web-Pic
 (See the repository for images showcasing various project features.)
 
 ## Installation Guide
@@ -112,7 +112,7 @@ npm run dev
 ```
 
 ## Project Demo
-(YouTube link: `https://tinyurl.com/BuyBuddies`)
+(YouTube link: https://tinyurl.com/BuyBuddies)
 
 ## Conclusion
 BuyBuddies is built with React, PHP, and MySQL, combining tech excellence with user-first design. More than just an e-commerce platform, it's a step toward a smarter, more secure shopping experience.
